@@ -8,7 +8,7 @@ I separated the Streamlit dashboard from the FastAPI service, used Pydantic to v
 
 ## Try the app
 
-[Try the Customer Feedback Analyzer](https://customer-feedback-analyzer-748gprrueqgffnaygsoevu.streamlit.app/)
+[Try the Customer Feedback Analyzer](https://customer-feedback-analyzer-e9knamtt665fhwzv9strhq.streamlit.app/)
 
 The deployed architecture is:
 
