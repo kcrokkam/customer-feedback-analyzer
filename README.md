@@ -1,22 +1,12 @@
 # Customer Feedback Analyzer
 
-[Profile](https://github.com/kcrokkam) · [All projects](https://github.com/kcrokkam/agentic-ai-projects)
+[About me](https://github.com/kcrokkam) · [My other projects](https://github.com/kcrokkam/agentic-ai-projects)
 
-> Turn unstructured customer reviews into consistent sentiment, satisfaction
-> scores, and topic themes through an interactive analytics dashboard.
+I built this application to turn written customer reviews into a consistent table of sentiment, satisfaction scores, and themes. My goal was to make it easier to see recurring issues while keeping the original reviews and individual results available for inspection.
 
-Organizations collect valuable feedback in reviews and surveys, but reading
-each response manually makes it difficult to spot recurring topics and overall
-sentiment. Customer Feedback Analyzer demonstrates a practical applied AI
-workflow that structures this text and summarizes successful analyses while
-keeping individual results available for review.
+I separated the Streamlit dashboard from the FastAPI service, used Pydantic to validate Gemini's responses, and kept summary calculations and SQLite persistence in their own modules. This let me test the application logic without depending on live model calls.
 
-The project combines a Streamlit dashboard, a validated FastAPI service, Google
-Gemini structured output, and local SQLite storage. The architecture is kept
-intentionally small while still covering UI, API, AI integration, analytics,
-persistence, testing, and failure handling.
-
-## 🚀 Live Demo
+## Try the app
 
 [Try the Customer Feedback Analyzer](https://customer-feedback-analyzer-748gprrueqgffnaygsoevu.streamlit.app/)
 
@@ -43,17 +33,6 @@ The deployed architecture is:
 - Browse previously saved feedback in the dashboard
 - Configure the model, endpoint, timeout, credentials, and database path through
   environment variables
-
-## Business problem
-
-Customer feedback is usually unstructured, which creates friction for analysts
-and business owners who want a quick view of satisfaction and recurring issues.
-This application turns a small batch of raw reviews into a consistent table and
-basic summary metrics, making exploratory feedback review faster and easier.
-
-It is a decision-support prototype rather than a replacement for human review.
-AI-generated labels can be wrong, and the current application does not claim
-production accuracy or measured business impact.
 
 ## Example workflow
 
@@ -261,7 +240,7 @@ consume API credits.
 - AI outputs can vary and should be reviewed before consequential use.
 - The project does not include a measured accuracy benchmark.
 
-## Future improvements
+## What I would improve next
 
 - Add CSV upload and downloadable results
 - Normalize similar themes into a controlled taxonomy
