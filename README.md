@@ -1,5 +1,7 @@
 # Customer Feedback Analyzer
 
+[Profile](https://github.com/kcrokkam) · [All projects](https://github.com/kcrokkam/agentic-ai-projects)
+
 > Turn unstructured customer reviews into consistent sentiment, satisfaction
 > scores, and topic themes through an interactive analytics dashboard.
 
@@ -142,8 +144,8 @@ failure-handling details.
 ### 1. Clone and install
 
 ```bash
-git clone <your-repository-url>
-cd project-feedback-analyzer
+git clone https://github.com/kcrokkam/customer-feedback-analyzer.git
+cd customer-feedback-analyzer
 uv sync --dev
 ```
 
