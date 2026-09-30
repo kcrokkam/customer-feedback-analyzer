@@ -51,6 +51,17 @@ except (ConfigurationError, sqlite3.Error, OSError) as exc:
     st.error(f"Application configuration error: {exc}")
     st.stop()
 
+
+def analyze_or_error(review: str) -> dict:
+    try:
+        return analyze_review(review, settings.api_url, settings.http_timeout)
+    except (requests.RequestException, ValidationError, ValueError) as exc:
+        return {
+            "review": review, "label": "error", "score": 0, "theme": "error",
+            "error": error_message(exc),
+        }
+
+
 st.title("📝 Customer Feedback Analyzer")
 st.write(
     "Turn customer reviews into structured sentiment, scores, and themes. "
@@ -68,20 +79,7 @@ if st.button("Analyze", type="primary"):
         results = []
         with st.spinner("Analyzing reviews..."):
             for review in reviews:
-                try:
-                    results.append(
-                        analyze_review(review, settings.api_url, settings.http_timeout)
-                    )
-                except (requests.RequestException, ValidationError, ValueError) as exc:
-                    results.append(
-                        {
-                            "review": review,
-                            "label": "error",
-                            "score": 0,
-                            "theme": "error",
-                            "error": error_message(exc),
-                        }
-                    )
+                results.append(analyze_or_error(review))
 
         st.session_state.results = results
 
@@ -112,6 +110,14 @@ if "results" in st.session_state:
         st.warning(
             f"{summary.failed} review(s) failed and were excluded from all summary metrics."
         )
+
+    if summary.failed and st.button("Retry failed reviews"):
+        with st.spinner("Retrying failed reviews..."):
+            st.session_state.results = [
+                analyze_or_error(row["review"]) if row["label"] == "error" else row
+                for row in results
+            ]
+        st.rerun()
 
     if st.button("💾 Save successful results"):
         try:

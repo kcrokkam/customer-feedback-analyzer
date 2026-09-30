@@ -33,3 +33,14 @@ def test_gemini_analyzer_validates_mocked_response() -> None:
 def test_gemini_analyzer_rejects_empty_response() -> None:
     with pytest.raises(AnalysisProviderError, match="empty response"):
         analyzer_with_response(None).analyze("A valid review")
+
+
+def test_provider_overload_has_actionable_error():
+    analyzer = analyzer_with_response(None)
+    class BusyError(Exception):
+        code = 503
+    def fail(**kwargs):
+        raise BusyError("provider unavailable")
+    analyzer.client.models.generate_content = fail
+    with pytest.raises(AnalysisProviderError, match="temporarily busy"):
+        analyzer.analyze("Slow customer support")

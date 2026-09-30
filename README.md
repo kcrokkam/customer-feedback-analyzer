@@ -29,6 +29,7 @@ The deployed architecture is:
 - Calculate average score and positive percentage from successful reviews only
 - Highlight the most common theme
 - Continue processing when an individual review fails
+- Retry failed reviews without rerunning successful analyses
 - Save only successful results to a local SQLite database
 - Browse previously saved feedback in the dashboard
 - Configure the model, endpoint, timeout, credentials, and database path through
@@ -150,7 +151,7 @@ GEMINI_API_KEY=your_gemini_api_key_here
 | --- | --- | --- | --- |
 | `GEMINI_API_KEY` | Yes | None | Authenticates Gemini requests |
 | `GOOGLE_API_KEY` | Alternative | None | Supported fallback credential name |
-| `GEMINI_MODEL` | No | `gemini-3.6-flash` | Gemini model used by FastAPI |
+| `GEMINI_MODEL` | No | `gemini-3.1-flash-lite` | Gemini model used by FastAPI |
 | `FASTAPI_URL` | No | `http://127.0.0.1:8000/analyze` | Endpoint called by Streamlit |
 | `HTTP_TIMEOUT` | No | `30` | Per-review HTTP timeout in seconds |
 | `DATABASE_PATH` | No | `feedback.db` | SQLite database location |
@@ -220,7 +221,8 @@ uv run pytest
 Tests cover summary calculations, API input validation, successful mocked
 analysis, provider failures, missing credentials, and SQLite save/load behavior.
 Gemini is mocked in API tests, so the suite does not make external AI calls or
-consume API credits.
+consume API credits. Provider requests have a 12-second timeout and at most one
+retry for transient server errors; rate limits are shown without automatic retries.
 
 ## Screenshots
 

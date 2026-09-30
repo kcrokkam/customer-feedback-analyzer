@@ -15,7 +15,16 @@ class GeminiAnalyzer:
     """Analyze customer reviews with Google Gemini."""
 
     def __init__(self, api_key: str, model: str) -> None:
-        self.client = genai.Client(api_key=api_key)
+        self.client = genai.Client(
+            api_key=api_key,
+            http_options=types.HttpOptions(
+                timeout=12000,
+                retry_options=types.HttpRetryOptions(
+                    attempts=2, initial_delay=1, max_delay=1,
+                    http_status_codes=[500, 502, 503, 504],
+                ),
+            ),
+        )
         self.model = model
 
     def analyze(self, review_text: str) -> Analysis:
@@ -37,7 +46,14 @@ class GeminiAnalyzer:
                 ),
             )
         except Exception as exc:
-            raise AnalysisProviderError("Gemini could not analyze the review.") from exc
+            code = getattr(exc, "code", None)
+            if code in {500, 502, 503, 504}:
+                message = "The AI service is temporarily busy. Please retry this review shortly."
+            elif code == 429:
+                message = "The AI service reached its request limit. Please wait before retrying."
+            else:
+                message = "Gemini could not analyze the review. Please try again later."
+            raise AnalysisProviderError(message) from exc
 
         if response.parsed is None:
             raise AnalysisProviderError("Gemini returned an empty response.")

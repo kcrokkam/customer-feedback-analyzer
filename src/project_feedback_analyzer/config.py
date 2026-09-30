@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 
 DEFAULT_API_URL = "http://127.0.0.1:8000/analyze"
-DEFAULT_GEMINI_MODEL = "gemini-3.6-flash"
+DEFAULT_GEMINI_MODEL = "gemini-3.1-flash-lite"
 DEFAULT_HTTP_TIMEOUT = 30.0
 DEFAULT_DATABASE_PATH = Path("feedback.db")
 
